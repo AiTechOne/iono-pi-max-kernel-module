@@ -143,13 +143,11 @@ class IonoPiMax:
     #######################################
     ## IonoPiMax Generals:
     def buzzer(self, t_on:int, t_off:int, rep:int):
-        if (type(t_on) == int) and (type(t_off) == int) and (type(rep) == int):
-            if rep > 10:
-                rep = 10
+        if rep <= 10:
             with open(f'/sys/class/ionopimax/buzzer/beep', 'w') as f:
-                f.write(f"{t_on*100} {t_off*100} {rep}")
+                f.write(f"{int(t_on*100)} {int(t_off*100)} {rep}")
         else:
-            logger.error("All variables must be integers!")
+            logger.error("Too many repetitions!!")
 
     def fan_always_on(self):
         with open(f'/sys/class/ionopimax/fan/always_on', 'w') as f:
@@ -401,9 +399,9 @@ class IonoPiMax:
     #######################################
     ## Configuration :
     def save_config(self):
-        with open(f'/sys/class/ionopimax/mcu', 'w') as f:
+        with open('/sys/class/ionopimax/mcu/config', 'w') as f:
             f.write(f"S")
 
     def restore_config(self):
-        with open(f'/sys/class/ionopimax/mcu', 'w') as f:
+        with open('/sys/class/ionopimax/mcu/config', 'w') as f:
             f.write(f"R")
